@@ -31,6 +31,7 @@ Status
 
 Maintained
 
+ - 2014/01/15 Add a quick & dirty (... and not yet completed) dev. guide
  - 2014/01/09 Add a serial remote example
  - 2013/12/29 Rev. A (improved P2D/GUI, FAT-FS support, setup menu, serial comm support)
  - 2013/08/11 First GUI version (not on git)

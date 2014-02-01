@@ -2,11 +2,12 @@
  * @file p2d_font.c
  * @brief p2d font management (limited to 1BPP and 4BPP)
  * @author Duboisset Philippe
- * @version 0.3b
+ * @version 0.4b
  * @date (yyyy-mm-dd)
- *  0.1b  2013-04-07: initial version
+ *  0.1b  2013-04-07 initial version
  *  0.2b  2013-07-23 small modification (disp. window restoration to NULL)
- *  0.3b  2013-09-07: implementation of P2D_GetGlyphWidth() & P2D_PutGlyph()
+ *  0.3b  2013-09-07 implementation of P2D_GetGlyphWidth() & P2D_PutGlyph()
+ *  0.4b  2014-01-30 small bug fix (setWnd issue)
  *
  * Copyright (C) <2013>  Duboisset Philippe <duboisset.philippe@gmail.com>
  *
@@ -322,6 +323,7 @@ static void PutGlyph(const rect_st *rec, const uint8_t *ptrGlyph) {
   /*apply the global clip to lrec, & compute the number of pixels composing the modified lrec*/
   P2D_ClipFit(&lrec);
   cntPxClip = P2D_GetPixelCnt(&lrec);
+  SetWnd(&lrec);
 
   /*if the lrec completly fits into the current clip && DISPLAY_SOLID -> optimized procedure*/
   if(context.mode == DISPLAY_SOLID && cntPxClip == cntPxGly) {
@@ -348,8 +350,7 @@ static void PutFast_1BPP(const rect_st *rec, const uint8_t *ptr, uint32_t cntPxC
 
   uint8_t mask = 0x80;
 
-  /*set a hardware window & just put the glyph stream*/
-  SetWnd(rec);
+  /*just put the glyph stream*/
   while(cntPxClip-- > 0) {
     if(*ptr & mask) Put(context.colFront);
     else Put(context.colBackgrnd);
@@ -418,8 +419,7 @@ static void PutFast_4BPP(const rect_st *rec, const uint8_t *ptr, uint32_t cntPxC
   uint8_t mask = 0xF0;
   uint8_t color;
 
-  /*set a hardware window & just put the glyph stream*/
-  SetWnd(rec);
+  /*just put the glyph stream*/
   while(cntPxClip-- > 0) {
     color = *ptr & mask;
     if(mask == 0xF0) color >>= 4;

@@ -2,9 +2,10 @@
  * @file gui_w_usr_entry.c
  * @brief user string entry (with text selection capability) implementation
  * @author Duboisset Philippe
- * @version 0.1b
+ * @version 0.2b
  * @date (yyyy-mm-dd)
- *  0.1b  2013-09-15  : initial version
+ *  0.1b  2013-09-15 : initial version
+ *  0.2b  2014-02-01 : minor bug fix (refresh insert bar ONLY if entry is editable)
  *
  * Copyright (C) <2013>  Duboisset Philippe <duboisset.philippe@gmail.com>
  *
@@ -372,7 +373,7 @@ static void EntryTask(void *_g_obj, void *_obj) {
   }
 
   /*check timer blink (for blinking the insert line)*/
-  if(IsTimerElapsed(entry->tBlink)) {
+  if(IsTimerElapsed(entry->tBlink) && entry->bEditable == true) {
     entry->bBlink = !entry->bBlink;
     entry->tBlink = GetPeriodicTimeout(500);
     GUI_ObjSetNeedRefresh(g_obj, true);

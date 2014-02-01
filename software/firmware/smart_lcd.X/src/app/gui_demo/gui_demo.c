@@ -2,8 +2,10 @@
  * @file gui_demo.c
  * @brief demo menu
  * @author Duboisset Philippe
- * @version 0.1b
- * @date (yyyy-mm-dd) 2013-11-01
+ * @version 0.2b
+ * @date (yyyy-mm-dd) 2013-11-01 initial version
+ *                    2014-01-30 critical bug fix ( if(sig < DEMO_ITEM_CNT) -> if(id < DEMO_ITEM_CNT) )
+ * 
  *
  * Copyright (C) <2013>  Duboisset Philippe <duboisset.philippe@gmail.com>
  *
@@ -186,7 +188,7 @@ static void Gui_DemoHandler(signal_t sig) {
     }
     /*else, same item pressed 2 times -> launch the corresponding demo*/
     else {
-      if(sig < DEMO_ITEM_CNT) {
+      if(id < DEMO_ITEM_CNT) {
         if(demoItems[id].pFunction != NULL) {
           GUI_SetUserTask(demoItems[id].pFunction);
         }

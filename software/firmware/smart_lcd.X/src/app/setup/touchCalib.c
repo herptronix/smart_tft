@@ -22,7 +22,7 @@
  */
 
 #include "touchCalib.h"
-#include "P2D.h"
+#include "p2d.h"
 #include "touchscreen.h"
 #include "timer.h"
 #include "resources.h"

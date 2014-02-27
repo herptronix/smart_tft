@@ -2,7 +2,7 @@
  * @file main.c
  * @brief SMART TFT software entry point
  * @author Duboisset Philippe
- * @version 0.2b
+ * @version 0.3b
  * @date (yyyy-mm-dd) 2013-11-01
  *
  * Copyright (C) <2013>  Duboisset Philippe <duboisset.philippe@gmail.com>
@@ -37,6 +37,11 @@
 #include "rtc.h"
 #include "diskio.h"
 #include "ff.h"
+
+
+#if DISP_ORIENTATION == 90 || DISP_ORIENTATION == 270
+  #warning "setup menu & demo are not designed (yet) to support such orientation"
+#endif
 
 
 /**

@@ -2,8 +2,9 @@
  * @file gui_w_list.h
  * @brief list implementation; use GUI_M_List instead
  * @author Duboisset Philippe
- * @version 0.1b
- * @date (yyyy-mm-dd) 2013-10-10
+ * @version 0.2b
+ * @date (yyyy-mm-dd) 2013-10-10 initial version
+ *                    2014-01-30 minor bug fix
  *
  * Copyright (C) <2013>  Duboisset Philippe <duboisset.philippe@gmail.com>
  *

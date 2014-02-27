@@ -44,7 +44,7 @@ typedef enum {
  * @brief set the grid spacing
  * @param length_t h: horizontal spacing, in pixel (min = 2px)
  * @param length_t v: vertical spacing, in pixel (min = 2px)
- * @return g_obj_st *: pointer to the associated generic object if succedeed, NULL if error.
+ * @return none
  */
 void GUI_W_GraphSetGridSpacing(length_t h, length_t v);
 

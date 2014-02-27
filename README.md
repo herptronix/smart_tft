@@ -31,6 +31,7 @@ Status
 
 Maintained
 
+ - 2014/02/27 Add display orientation support (limited to BSP) & Minor bug fixes
  - 2014/02/01 Minor bug fixes (p2d_font.c / touchCalib.c / gui_w_usr_entry.c)
  - 2014/01/15 Add a quick & dirty (... and not yet completed) dev. guide
  - 2014/01/09 Add a serial remote example

@@ -2,11 +2,12 @@
  * @file touchscreen.h
  * @brief resistive touchscreen driver
  * @author Duboisset Philippe
- * @version 0.3b
- * @date (yyyy-mm-dd) 
+ * @version 0.4b
+ * @date (yyyy-mm-dd)
  * 2013-07-13 initial version
  * 2013-09-22 modification of TouchScreenCalib(NULL)
  * 2013-09-26 modification to avoid the parasit capacitance error
+ * 2014-02-20 support of display orientation (0, 90, 180, 270°)
  *
  * Copyright (C) <2013>  Duboisset Philippe <duboisset.philippe@gmail.com>
  *

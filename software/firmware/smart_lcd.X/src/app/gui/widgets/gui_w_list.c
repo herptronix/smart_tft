@@ -2,8 +2,9 @@
  * @file gui_w_list.c
  * @brief list implementation; use GUI_M_List instead
  * @author Duboisset Philippe
- * @version 0.1b
- * @date (yyyy-mm-dd) 2013-10-10
+ * @version 0.2b
+ * @date (yyyy-mm-dd) 2013-10-10 initial version
+ *                    2014-01-30 minor bug fix
  *
  * Copyright (C) <2013>  Duboisset Philippe <duboisset.philippe@gmail.com>
  *
@@ -633,9 +634,17 @@ static void ListRefresh(void *_g_obj, void *_obj) {
       }
 
       /*item selected != of the previous one? refresh list*/
-      if(field != NULL && list->pSelectedItem != field->pItem) {
-        list->pSelectedItem = field->pItem;
-        GUI_ObjSetNeedRefresh(g_obj, true);
+      if(field != NULL) {
+        if(list->pSelectedItem != field->pItem) {
+          list->pSelectedItem = field->pItem;
+          GUI_ObjSetNeedRefresh(g_obj, true);
+        }
+      }
+      else {
+        if(list->pSelectedItem != NULL) {
+          list->pSelectedItem = NULL;
+          GUI_ObjSetNeedRefresh(g_obj, true);
+        }
       }
     }
   }

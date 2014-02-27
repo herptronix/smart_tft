@@ -2,11 +2,12 @@
  * @file ILI9320.c
  * @brief lcd driver
  * @author Duboisset Philippe
- * @version 0.4b
+ * @version 0.5b
  * @date (yyyy-mm-dd) 2013-04-07
  *                    2013-07-27: improvement of power-on sequence
  *                    2013-08-20: modification of <0x0003, 0x1038> (RGB swap, for compatibility with SDL)
  *                    2013-11-14: LCD_WriteReg is now accessible outside (for gamma ajdustement)
+ *                    2014-02-20: support of display orientation (0, 90, 180, 270°)
  *
  * Copyright (C) <2013>  Duboisset Philippe <duboisset.philippe@gmail.com>
  *
@@ -27,6 +28,8 @@
 #include "gpio.h"
 #include "delay.h"
 
+
+
 #define CS_PORT   G
 #define CS_PIN    13
 #define RS_PORT   G
@@ -46,7 +49,7 @@
  */
 #define T_WAIT 0xFFFE
 #define CFGEND 0xFFFF
-static length_t lcd_w = 0, lcd_h = 0;
+static length_t lcd_w = 0, lcd_h = 0, xMax = 0, yMax = 0;
 static const uint16_t ili9320_cfg[] = {
 
   /*
@@ -77,7 +80,19 @@ static const uint16_t ili9320_cfg[] = {
   /** other registers setting**/
   0x0001, 0x0000, /*0x0001: Driver Output Control 1 [SM;SS]*/
   0x0002, 0x0600, /*0x0002: LCD Driving Wave Control [B/C;EOR]*/
+
+#if DISP_ORIENTATION == 0
   0x0003, 0x1038, /*0x0003: Entry Mode [TRI;DFM;BGR;HWM;ORG;I/D1;I/D0;AM]*/
+#elif DISP_ORIENTATION == 180
+  0x0003, 0x1008, /*0x0003: Entry Mode [TRI;DFM;BGR;HWM;ORG;I/D1;I/D0;AM]*/
+#elif DISP_ORIENTATION == 90
+  0x0003, 0x1020, /*0x0003: Entry Mode [TRI;DFM;BGR;HWM;ORG;I/D1;I/D0;AM]*/
+#elif DISP_ORIENTATION == 270
+  0x0003, 0x1010, /*0x0003: Entry Mode [TRI;DFM;BGR;HWM;ORG;I/D1;I/D0;AM]*/
+#else
+  #error "DISP_ORIENTATION shall be defined to a correct value"
+#endif
+
   0x0004, 0x0000, /*0x0004: Resize Control [RCV1-0;RCH1-0;RSZ1-0]*/
   0x0007, 0x0000, /*0x0007: Display Control 1 [PTDE1-0;BASEE;GON;DTE;CL;D1;D0]*/
   0x0008, 0x0404, /*0x0008: Display Control 2 [FP3-0;BP3-0]*/
@@ -155,9 +170,18 @@ void LCD_Init(void) {
 
   uint16_t i;
   uint16_t reg, val;
+  bool bDone;
 
+  #if DISP_ORIENTATION == 0 || DISP_ORIENTATION == 180
   lcd_w = 320;
   lcd_h = 240;
+  #else
+  lcd_w = 240;
+  lcd_h = 320;
+  #endif
+
+  xMax = lcd_w - 1;
+  yMax = lcd_h - 1;
 
   /*uC configuration*/
   RST_SET; GPIO_SetPinDirection(RST_PORT, RST_PIN, GPIO_PIN_OUTPUT);
@@ -171,7 +195,8 @@ void LCD_Init(void) {
 
   /*registers setting*/
   i = 0;
-  while(1) {
+  bDone = false;
+  while(bDone == false) {
 
     reg = ili9320_cfg[i++];
     val = ili9320_cfg[i++];
@@ -180,7 +205,7 @@ void LCD_Init(void) {
       DelayMs(val);
     }
     else if(reg == CFGEND) {
-      break;
+      bDone = true;
     }
     else {
       WriteReg(reg, val);
@@ -223,8 +248,21 @@ length_t LCD_GetHeight(void) {
  * @return none
  */
 void LCD_SetPos(coord_t x, coord_t y) {
+
+#if DISP_ORIENTATION == 0
   WriteReg(0x0020, y);
   WriteReg(0x0021, x);
+#elif DISP_ORIENTATION == 180
+  WriteReg(0x0020, yMax - y);
+  WriteReg(0x0021, xMax - x);
+#elif DISP_ORIENTATION == 90
+  WriteReg(0x0020, xMax - x);
+  WriteReg(0x0021, y);
+#elif DISP_ORIENTATION == 270
+  WriteReg(0x0020, x);
+  WriteReg(0x0021, yMax - y);
+#endif
+
   WriteToGram();
 }
 
@@ -246,10 +284,29 @@ void LCD_SetWnd(const rect_st *rec) {
     lrect.w = lcd_w;
     lrect.h = lcd_h;
   }
+
+#if DISP_ORIENTATION == 0
   WriteReg(0x0050, lrect.y);
   WriteReg(0x0051, lrect.y + lrect.h - 1);
   WriteReg(0x0052, lrect.x);
   WriteReg(0x0053, lrect.x + lrect.w - 1);
+#elif DISP_ORIENTATION == 180
+  WriteReg(0x0051, yMax - lrect.y);
+  WriteReg(0x0050, yMax - (lrect.y + lrect.h - 1));
+  WriteReg(0x0053, xMax - lrect.x);
+  WriteReg(0x0052, xMax - (lrect.x + lrect.w - 1));
+#elif DISP_ORIENTATION == 90
+  WriteReg(0x0052, lrect.y);
+  WriteReg(0x0053, lrect.y + lrect.h - 1);
+  WriteReg(0x0051, xMax - lrect.x);
+  WriteReg(0x0050, xMax - (lrect.x + lrect.w - 1));
+#elif DISP_ORIENTATION == 270
+  WriteReg(0x0053, yMax - lrect.y);
+  WriteReg(0x0052, yMax - (lrect.y + lrect.h - 1));
+  WriteReg(0x0050, lrect.x);
+  WriteReg(0x0051, lrect.x + lrect.w - 1);
+#endif
+
   LCD_SetPos(lrect.x, lrect.y);
   WriteToGram();
 }

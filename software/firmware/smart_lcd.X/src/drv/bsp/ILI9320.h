@@ -2,11 +2,12 @@
  * @file ILI9320.h
  * @brief lcd driver
  * @author Duboisset Philippe
- * @version 0.4b
+ * @version 0.5b
  * @date (yyyy-mm-dd) 2013-04-07
  *                    2013-07-27: improvement of power-on sequence
  *                    2013-08-20: modification of <0x0003, 0x1038> (RGB swap, for compatibility with SDL)
  *                    2013-11-14: LCD_WriteReg is now accessible outside (for gamma ajdustement)
+ *                    2014-02-20: support of display orientation (0, 90, 180, 270°)
  *
  * Copyright (C) <2013>  Duboisset Philippe <duboisset.philippe@gmail.com>
  *

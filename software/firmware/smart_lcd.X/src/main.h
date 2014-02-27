@@ -2,7 +2,7 @@
  * @file main.h
  * @brief SMART TFT software entry point
  * @author Duboisset Philippe
- * @version 0.2b
+ * @version 0.3b
  * @date (yyyy-mm-dd) 2013-11-01
  *
  * Copyright (C) <2013>  Duboisset Philippe <duboisset.philippe@gmail.com>
@@ -44,6 +44,17 @@
  * it will save 3-4% of flash memory
  */
 #define INCLUDE_GUI_DEMO
+
+
+/**
+ * DISP_ORIENTATION
+ * 0   : normal landscape (default)
+ * 90  : normal portrait                -> do not forget to re-callibrate the touchscreen
+ * 180 : reversed landscape             -> do not forget to re-callibrate the touchscreen
+ * 270 : reversed portrait              -> do not forget to re-callibrate the touchscreen
+ */
+#define DISP_ORIENTATION  0
+
 
 /*current task; executed at each software cycle, in the main loop*/
 extern void (*pCurrentTask) (void);

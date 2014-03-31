@@ -31,6 +31,7 @@ Status
 
 Maintained
 
+ - 2014/03/31 Add sprite & font converters (sources & win32 exe)
  - 2014/02/27 Add display orientation support (limited to BSP) & Minor bug fixes
  - 2014/02/01 Minor bug fixes (p2d_font.c / touchCalib.c / gui_w_usr_entry.c)
  - 2014/01/15 Add a quick & dirty (... and not yet completed) dev. guide
